@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fractals — An Interactive Talk</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpolygon points='8,1 1,15 15,15' fill='none' stroke='%237cf7d0' stroke-width='1'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="vendor/reveal/dist/reveal.css" />
+    <link rel="stylesheet" href="vendor/reveal/dist/theme/black.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Fractal render stage: fixed full-screen canvases behind the deck -->
+    <div id="stage">
+      <canvas id="c-sierpinski"></canvas>
+      <canvas id="c-sierpinski-lines"></canvas>
+      <canvas id="c-mandelbrot"></canvas>
+      <canvas id="c-square"></canvas>
+      <canvas id="c-barnsley"></canvas>
+    </div>
+
+    <!-- Name + formula overlays, rendered above everything -->
+    <div id="overlays">
+      <div class="fractal-overlay" id="ov-sierpinski">
+        <p class="title">Sierpiński Triangle</p>
+        <div class="formula">
+          S<sub>i+1</sub> =
+          <span class="frac"><span class="num">1</span><span class="den">2</span></span>
+          ( S<sub>i</sub> + V )
+        </div>
+      </div>
+
+      <div class="fractal-overlay" id="ov-mandelbrot">
+        <p class="title">Mandelbrot Set</p>
+        <div class="formula">z<sub>n+1</sub> = z<sub>n</sub><sup>2</sup> + c</div>
+      </div>
+
+      <div class="fractal-overlay" id="ov-barnsley">
+        <p class="title">Barnsley Fern</p>
+        <div class="formula" style="font-size: clamp(12px, 1.4vw, 16px)">
+          f<sub>i</sub>(x, y) =
+          <span style="display: inline-block; vertical-align: middle">
+            [ a x + b y + e , &nbsp; c x + d y + f ]
+          </span>
+          <div style="margin-top: 6px; font-size: 0.85em; opacity: 0.9">
+            f₁: 0, 0, 0, 0.16, 0, 0 &nbsp;·&nbsp; p=.01<br />
+            f₂: .85, .04, −.04, .85, 0, 1.6 &nbsp;·&nbsp; p=.85<br />
+            f₃: .2, −.26, .23, .22, 0, 1.6 &nbsp;·&nbsp; p=.07<br />
+            f₄: −.15, .28, .26, .24, 0, .44 &nbsp;·&nbsp; p=.07
+          </div>
+        </div>
+      </div>
+
+      <!-- Square slide fade-in lines -->
+      <div class="square-lines" id="square-lines">
+        <div class="line" id="sq-perimeter">Perimeter = 4</div>
+        <div class="line" id="sq-area">Area = 1</div>
+      </div>
+    </div>
+
+    <!-- Barnsley IFS slider panel -->
+    <div class="slider-panel" id="barnsley-panel">
+      <h3>Fern IFS parameters</h3>
+      <div id="barnsley-sliders"></div>
+      <button class="reset-btn" id="barnsley-reset">Reset to classic fern</button>
+    </div>
+
+    <!-- Per-slide instruction hint -->
+    <div class="hint" id="hint"></div>
+
+    <!-- Reveal.js deck (transparent, click-through) -->
+    <div class="reveal">
+      <div class="slides">
+        <!-- Title -->
+        <section data-fractal="none">
+          <div class="deck-title">
+            <h1>Fractals</h1>
+            <p>Infinite complexity from simple rules — an interactive tour</p>
+            <p style="font-size: 0.7em; opacity: 0.55">
+              Use → / Enter to advance
+            </p>
+          </div>
+        </section>
+
+        <!-- Sierpinski chaos game -->
+        <section
+          data-fractal="sierpinski"
+          data-hint="Click a vertex (A/B/C), then click a start point · keep clicking vertices · SPACE = auto-run / pause · drag to pan · scroll to zoom · → next"
+        ></section>
+
+        <!-- Mandelbrot -->
+        <section
+          data-fractal="mandelbrot"
+          data-hint="Scroll to zoom · drag to pan · → next"
+        ></section>
+
+        <!-- Square -->
+        <section
+          data-fractal="square"
+          data-hint="Click to reveal measurements · → next"
+        ></section>
+
+        <!-- Mandelbrot again -->
+        <section
+          data-fractal="mandelbrot"
+          data-hint="Scroll to zoom · drag to pan · → next"
+        ></section>
+
+        <!-- Barnsley fern -->
+        <section
+          data-fractal="barnsley"
+          data-hint="Adjust the IFS sliders · drag to pan · scroll to zoom · → next"
+        ></section>
+
+        <!-- Nature -->
+        <section data-fractal="none" class="nature-slide">
+          <h2>Fractals in Nature</h2>
+          <div class="nature-grid" id="nature-grid"></div>
+        </section>
+      </div>
+    </div>
+
+    <script src="vendor/reveal/dist/reveal.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/sierpinski.js"></script>
+    <script src="js/mandelbrot.js"></script>
+    <script src="js/square.js"></script>
+    <script src="js/barnsley.js"></script>
+    <script src="js/nature.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

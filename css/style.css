@@ -1,0 +1,312 @@
+/* ==========================================================================
+   Fractals — presentation styles
+   Dark theme, light text, consistent typography.
+   ========================================================================== */
+
+:root {
+  --bg: #0a0a12;
+  --fg: #e9e9f2;
+  --accent: #7cf7d0;
+  --accent-2: #9db4ff;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --mono: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  overflow: hidden;
+}
+
+/* --- Fractal stage: fixed full-screen canvases behind the Reveal deck ----- */
+#stage {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: var(--bg);
+}
+
+#stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  touch-action: none;
+}
+
+#stage canvas.active {
+  display: block;
+  opacity: 1;
+}
+
+#stage canvas.interactive {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+/* Transient line overlay for the Sierpiński chaos game: sits above the
+   points canvas, always click-through, shown only while that slide is up.
+   Selector uses #stage canvas#id so opacity beats the base `#stage canvas`
+   rule (which sets opacity:0). */
+#stage canvas#c-sierpinski-lines {
+  display: none;
+  opacity: 1;
+  transition: none;
+  pointer-events: none;
+}
+#stage canvas#c-sierpinski-lines.on {
+  display: block;
+}
+
+/* --- Reveal deck sits on top but is transparent & click-through ----------- */
+.reveal-viewport,
+.reveal {
+  background: transparent !important;
+}
+
+.reveal {
+  z-index: 2;
+  pointer-events: none;
+  font-family: var(--font) !important;
+}
+
+.reveal .slides section {
+  background: transparent;
+}
+
+/* Re-enable interaction for elements that need it (sliders etc.) */
+.reveal .interactive-ui {
+  pointer-events: auto;
+}
+
+.reveal .progress {
+  color: var(--accent);
+}
+
+/* --- Instruction hint (top of each interactive slide) --------------------- */
+.hint {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: rgba(233, 233, 242, 0.72);
+  background: rgba(10, 10, 18, 0.55);
+  border: 1px solid rgba(157, 180, 255, 0.18);
+  padding: 8px 16px;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  text-align: center;
+  max-width: 90vw;
+}
+
+.hint.visible {
+  opacity: 1;
+}
+
+/* --- Fractal name + formula overlay (bottom-left, above everything) ------- */
+#overlays {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.fractal-overlay {
+  position: absolute;
+  left: 44px;
+  bottom: 40px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fractal-overlay.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fractal-overlay .title {
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--fg);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+  margin: 0 0 10px 0;
+}
+
+.fractal-overlay .formula {
+  font-family: var(--mono);
+  font-size: clamp(16px, 2vw, 24px);
+  color: var(--accent);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
+}
+
+/* Inline math helpers */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 0.15em;
+  line-height: 1.05;
+}
+.frac .num {
+  border-bottom: 1.5px solid currentColor;
+  padding: 0 0.25em;
+}
+.frac .den {
+  padding: 0 0.25em;
+}
+
+/* --- Square slide labels -------------------------------------------------- */
+.square-lines {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(230px, -40px);
+  font-family: var(--mono);
+  font-size: clamp(20px, 2.6vw, 34px);
+  line-height: 1.8;
+}
+.square-lines .line {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  color: var(--accent);
+}
+.square-lines .line.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* --- Barnsley slider panel ------------------------------------------------ */
+.slider-panel {
+  position: fixed;
+  top: 64px;
+  right: 28px;
+  z-index: 45;
+  width: 268px;
+  max-height: 78vh;
+  overflow-y: auto;
+  background: rgba(12, 12, 22, 0.82);
+  border: 1px solid rgba(157, 180, 255, 0.22);
+  border-radius: 12px;
+  padding: 16px 18px;
+  backdrop-filter: blur(8px);
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.slider-panel.visible {
+  opacity: 1;
+}
+.slider-panel h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-2);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.slider-row {
+  margin-bottom: 12px;
+}
+.slider-row label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  color: var(--fg);
+  font-family: var(--mono);
+}
+.slider-row label .val {
+  color: var(--accent);
+}
+.slider-row input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+.slider-panel .reset-btn {
+  width: 100%;
+  margin-top: 4px;
+  padding: 7px;
+  border: 1px solid rgba(157, 180, 255, 0.35);
+  background: rgba(157, 180, 255, 0.08);
+  color: var(--fg);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 13px;
+}
+.slider-panel .reset-btn:hover {
+  background: rgba(157, 180, 255, 0.18);
+}
+
+/* --- Title slide & Nature slide (Reveal content) -------------------------- */
+.deck-title {
+  text-align: center;
+}
+.deck-title h1 {
+  font-size: clamp(48px, 8vw, 96px);
+  margin: 0;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.deck-title p {
+  color: rgba(233, 233, 242, 0.7);
+  font-size: clamp(16px, 2vw, 24px);
+  margin-top: 18px;
+}
+
+.nature-slide h2 {
+  color: var(--fg);
+  font-weight: 600;
+  font-size: clamp(26px, 4.5vw, 42px);
+  margin: 0 0 16px 0;
+}
+.nature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: min(1040px, 90vw);
+  margin: 0 auto;
+}
+.nature-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(157, 180, 255, 0.15);
+  border-radius: 12px;
+  padding: 10px;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.nature-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.nature-card svg {
+  width: 100%;
+  height: 108px;
+  display: block;
+}
+.nature-card .caption {
+  margin-top: 6px;
+  font-size: 13px;
+  color: rgba(233, 233, 242, 0.82);
+}
