@@ -156,6 +156,21 @@ body {
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
 }
 
+/* The Mandelbrot sits over a bright, colourful fractal where thin coloured
+   text washes out. Give its overlay a dark backdrop with white text so the
+   name + equation read clearly on any part of the set (light or dark). */
+#ov-mandelbrot {
+  background: rgba(6, 8, 16, 0.86);
+  padding: 14px 22px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(157, 180, 255, 0.22);
+  backdrop-filter: blur(5px);
+}
+#ov-mandelbrot .formula {
+  color: #ffffff;
+  text-shadow: none;
+}
+
 /* Inline math helpers */
 .frac {
   display: inline-flex;
@@ -274,6 +289,17 @@ body {
   margin-top: 18px;
 }
 
+/* Override Reveal's vertical centering (which mis-anchors this taller slide)
+   and flex-center the heading + grid within the full slide height. */
+.reveal .slides section.nature-slide {
+  top: 0 !important;
+  height: 100%;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .nature-slide h2 {
   color: var(--fg);
   font-weight: 600;
@@ -282,16 +308,15 @@ body {
 }
 .nature-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  width: min(1040px, 90vw);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: min(900px, 88vw);
   margin: 0 auto;
 }
 .nature-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(157, 180, 255, 0.15);
   border-radius: 12px;
-  padding: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(157, 180, 255, 0.15);
   opacity: 0;
   transform: translateY(18px);
   transition: opacity 0.6s ease, transform 0.6s ease;
@@ -300,13 +325,9 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
-.nature-card svg {
+.nature-card img {
+  display: block;
   width: 100%;
   height: 108px;
-  display: block;
-}
-.nature-card .caption {
-  margin-top: 6px;
-  font-size: 13px;
-  color: rgba(233, 233, 242, 0.82);
+  object-fit: cover;
 }

@@ -63,6 +63,12 @@ Instead the Mandelbrot slides use a self-contained WebGL shader renderer
 here that provides the same experience — smooth-colored rendering with
 mouse-wheel zoom (about the cursor) and drag-to-pan.
 
+## Image credits
+
+The nature-slide photographs live in `pictures/`. `lightning-fractal.jpg` is
+["Large lightning bolt"](https://commons.wikimedia.org/wiki/File:Large_lightning_bolt.jpg)
+by **Guilerms**, licensed **CC BY-SA 4.0** (attribution + share-alike required).
+
 ## Testing
 
 An end-to-end Playwright suite drives every slide (clicks, spacebar

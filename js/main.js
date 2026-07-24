@@ -25,6 +25,9 @@
     barnsley: { mod: barn, canvas: $("c-barnsley") },
   };
 
+  // Exposed for debugging / automated tests (e.g. driving a deep zoom).
+  window.__ft = { sier, mand, sq, barn };
+
   const allOverlays = ["ov-sierpinski", "ov-mandelbrot", "ov-barnsley"].map($);
   const squareLines = [$("sq-perimeter"), $("sq-area")];
 

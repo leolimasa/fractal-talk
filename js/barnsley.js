@@ -27,6 +27,8 @@ class Barnsley {
       { fn: "f4", k: "a", label: "f₄ a (left leaflet)", min: -0.4, max: 0.2, step: 0.01 },
     ];
 
+    this.pointTarget = 140000; // number of points drawn (resolution)
+
     this._buildSliders();
     this.resetBtn.addEventListener("click", () => this._resetParams());
     this._bind();
@@ -60,6 +62,25 @@ class Barnsley {
       };
       input.addEventListener("input", sync);
     }
+
+    // Resolution control — not an IFS parameter; sets how many points are drawn.
+    const prow = document.createElement("div");
+    prow.className = "slider-row interactive-ui";
+    prow.innerHTML = `
+      <label for="sl-points">Resolution (points)<span class="val" id="sl-points-val"></span></label>
+      <input type="range" id="sl-points" min="20000" max="600000" step="20000" />
+    `;
+    this.slidersEl.appendChild(prow);
+    const pInput = prow.querySelector("input");
+    const pVal = prow.querySelector(".val");
+    const pSync = () => {
+      this.pointTarget = parseInt(pInput.value, 10);
+      pVal.textContent = Math.round(this.pointTarget / 1000) + "k";
+      this._restart();
+    };
+    pInput.addEventListener("input", pSync);
+    this.pointsInput = { input: pInput, val: pVal };
+
     this._syncInputs();
   }
 
@@ -69,6 +90,10 @@ class Barnsley {
       const v = this.params[d.fn][d.k];
       input.value = v;
       val.textContent = v.toFixed(2);
+    }
+    if (this.pointsInput) {
+      this.pointsInput.input.value = this.pointTarget;
+      this.pointsInput.val.textContent = Math.round(this.pointTarget / 1000) + "k";
     }
   }
 
@@ -136,7 +161,7 @@ class Barnsley {
     this.px = 0;
     this.py = 0;
     this.count = 0;
-    this.target = 140000;
+    this.target = this.pointTarget;
   }
 
   _next() {
